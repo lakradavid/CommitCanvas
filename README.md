@@ -111,3 +111,224 @@ git tag           # List or create tags
 git status        # Working tree status
 git log           # Commit history
 ```
+
+---
+
+## Examples
+
+### 1. Basic Commit Workflow
+
+The most fundamental Git flow — initialize, add files, and commit.
+
+```bash
+git init
+touch README.md
+git add README.md
+git commit -m "Initial commit"
+git log
+```
+
+**What you'll see:** A single commit node appears on the `main` branch in the graph. The right panel shows `HEAD → main`, staging area is empty, and 1 commit is tracked.
+
+---
+
+### 2. Feature Branch Workflow
+
+Develop a feature in isolation and merge it back.
+
+```bash
+git init
+touch main.js
+git add .
+git commit -m "Initial commit"
+
+git checkout -b feature/login
+touch login.js
+git add .
+git commit -m "Add login page"
+
+git checkout main
+git merge feature/login
+```
+
+**What you'll see:** Two branches appear in the animated graph. After the merge, a merge commit node with two parent edges is drawn — showing exactly how `feature/login` joins `main`.
+
+---
+
+### 3. Rebase for a Clean History
+
+Instead of a merge commit, replay your feature commits on top of main.
+
+```bash
+git init
+touch app.js
+git add .
+git commit -m "Initial commit"
+
+git checkout -b feature/navbar
+touch navbar.js
+git add .
+git commit -m "Add navbar"
+
+git checkout main
+touch utils.js
+git add .
+git commit -m "Add utils"
+
+git checkout feature/navbar
+git rebase main
+```
+
+**What you'll see:** The `feature/navbar` commit is replayed with a new hash directly on top of `main`'s latest commit, producing a perfectly linear graph — no merge diamond.
+
+---
+
+### 4. Undo a Mistake with Reset
+
+Made a bad commit? Roll HEAD back.
+
+```bash
+git init
+touch file.txt
+git add .
+git commit -m "Good commit"
+
+touch oops.txt
+git add .
+git commit -m "Bad commit"
+
+git reset --hard HEAD~1
+git log
+```
+
+**What you'll see:** The "Bad commit" node disappears from the graph and `main` pointer moves back one step. `--hard` discards all staged changes too — the right panel shows an empty staging area.
+
+---
+
+### 5. Safe Undo with Revert
+
+When the history is shared, revert instead of reset.
+
+```bash
+git init
+touch app.js
+git add .
+git commit -m "Add app.js"
+
+touch bug.js
+git add .
+git commit -m "Introduce bug"
+
+git revert HEAD
+git log
+```
+
+**What you'll see:** A new `Revert "Introduce bug"` commit appears *after* the bad one — history is preserved, nothing is rewritten. Safe to use on shared branches.
+
+---
+
+### 6. Stash Unfinished Work
+
+Switch context without losing work-in-progress.
+
+```bash
+git init
+touch app.js
+git add .
+git commit -m "Initial commit"
+
+touch wip.js
+git stash
+
+git stash list
+# → stash@{0}: WIP on main
+
+git stash pop
+git status
+```
+
+**What you'll see:** After `git stash`, the staging area in the right panel clears. After `git stash pop`, `wip.js` is back in the staged files list.
+
+---
+
+### 7. Tag a Release
+
+Mark a commit permanently as a version.
+
+```bash
+git init
+touch app.js
+git add .
+git commit -m "v1.0 release"
+
+git tag v1.0
+git tag
+# → v1.0
+```
+
+**What you'll see:** The commit node in the graph gets a `v1.0` tag badge. The state panel also lists active tags.
+
+---
+
+### 8. Detached HEAD Exploration
+
+Inspect any past commit without affecting branches.
+
+```bash
+git init
+touch a.txt
+git add .
+git commit -m "Commit A"
+
+touch b.txt
+git add .
+git commit -m "Commit B"
+
+git log
+# copy the hash of Commit A, e.g. a1b2c3d
+
+git checkout a1b2c3d
+git status
+```
+
+**What you'll see:** The graph shows `HEAD` pointing directly to the old commit node, detached from any branch. The state panel displays `detached HEAD` mode as a warning.
+
+---
+
+### 9. Full Challenge Walkthrough (Challenge 4 — Merge Branches)
+
+This is the exact solution for the built-in "Merge Branches" challenge.
+
+```bash
+git init
+touch feature.txt
+git add .
+git commit -m "base commit"
+
+git checkout -b feature
+touch feature.txt
+git add .
+git commit -m "feature"
+
+git checkout main
+git merge feature
+```
+
+The challenge validator checks for `minBranches: 2` and `minMergeCommits: 1` — both satisfied here. You'll earn **30 points**.
+
+---
+
+### 10. Stash with a Custom Message
+
+```bash
+git init
+touch task.js
+git stash -m "half-done task refactor"
+
+git stash list
+# → stash@{0}: half-done task refactor
+
+git stash pop
+```
+
+Custom stash messages make it easy to track multiple WIP entries when switching between several tasks.
