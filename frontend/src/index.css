@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas-bg text-canvas-text font-mono;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-canvas-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-canvas-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-canvas-muted;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-accent-blue text-canvas-bg rounded-md font-semibold text-sm
+           hover:bg-blue-400 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-canvas-surface text-canvas-text border border-canvas-border rounded-md
+           font-semibold text-sm hover:border-accent-blue transition-colors duration-200;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-accent-red text-white rounded-md font-semibold text-sm
+           hover:bg-red-400 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-canvas-surface border border-canvas-border rounded-lg p-4;
+  }
+
+  .input {
+    @apply w-full bg-canvas-bg border border-canvas-border rounded-md px-3 py-2 text-sm
+           text-canvas-text placeholder-canvas-muted focus:outline-none focus:border-accent-blue
+           transition-colors duration-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+}
+
+/* React Flow overrides */
+.react-flow__background {
+  background-color: #0d1117 !important;
+}
+
+.react-flow__controls {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+}
+
+.react-flow__controls-button {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.react-flow__minimap {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+}
