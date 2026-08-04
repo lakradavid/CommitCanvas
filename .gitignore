@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-node_modules/
-=======
 node_modules/
 dist/
 .env
 *.log
 .DS_Store
 Thumbs.db
->>>>>>> ae33d38d1d8acb65694931b16c343231d520fc2b
