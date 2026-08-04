@@ -23,10 +23,26 @@ app.use(compression());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 // CORS
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5000',
+];
+if (process.env.CLIENT_URL) {
+  const origins = process.env.CLIENT_URL.split(',').map(o => o.trim());
+  allowedOrigins.push(...origins);
+}
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
 
 // Body parsing
 app.use(express.json({ limit: '2mb' }));
