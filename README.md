@@ -1,4 +1,4 @@
-# Commit Canvas 🎨
+# Commit Canvas
 
 > Learn Git visually through interactive animated commit graphs.
 
