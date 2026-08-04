@@ -1,15 +1,13 @@
-import { MongoClient } from 'mongodb';
-const client = new MongoClient("mongodb+srv://aloksharma1097_db_user:A4o7qGY9Ow10NINi@commitcanvas.vm7gp2a.mongodb.net/?appName=commitcanvas");
-export async function connectToMongoDB() {
+import mongoose from 'mongoose';
+
+export const connectDB = async () => {
   try {
-    await client.connect();
-    console.log("You successfully connected to MongoDB!");
-    return client;
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
+    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
   } catch (err) {
-    console.dir(err);
+    console.error('❌ MongoDB connection error:', err.message);
+    process.exit(1);
   }
-}
-// Call this only when your application terminates
-export async function disconnectFromMongoDB() {
-  await client.close();
-}
+};
