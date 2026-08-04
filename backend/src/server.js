@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,12 +13,12 @@ import repoRoutes from './routes/repo.routes.js';
 import historyRoutes from './routes/history.routes.js';
 import challengeRoutes from './routes/challenge.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Trust Render/proxy's X-Forwarded-For header
+app.set('trust proxy', 1);
 
 // Security & utility middleware
 app.use(helmet());
