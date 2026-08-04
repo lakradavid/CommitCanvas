@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: commitcanvas-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: commitcanvas
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - commitcanvas-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: commitcanvas-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://admin:secret@mongo:27017/commitcanvas?authSource=admin
+      JWT_SECRET: supersecretjwtkey_change_in_production
+      JWT_EXPIRES_IN: 7d
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    networks:
+      - commitcanvas-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: commitcanvas-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    ports:
+      - '5173:80'
+    depends_on:
+      - backend
+    networks:
+      - commitcanvas-net
+
+volumes:
+  mongo_data:
+
+networks:
+  commitcanvas-net:
+    driver: bridge
