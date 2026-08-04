@@ -69,7 +69,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Da
 // Root welcome message
 app.get('/', (_req, res) => res.json({
   message: '🚀 Commit Canvas API is active.',
-  frontend: process.env.CLIENT_URL || 'http://localhost:5173',
+  frontend: process.env.CLIENT_URL ? process.env.CLIENT_URL.trim() : 'http://localhost:5173',
   health: '/api/health'
 }));
 
