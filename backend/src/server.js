@@ -66,6 +66,13 @@ app.use('/api/challenges', challengeRoutes);
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
+// Root welcome message
+app.get('/', (_req, res) => res.json({
+  message: '🚀 Commit Canvas API is active.',
+  frontend: process.env.CLIENT_URL || 'http://localhost:5173',
+  health: '/api/health'
+}));
+
 // Error handler
 app.use(errorHandler);
 
